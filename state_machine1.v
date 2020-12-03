@@ -1,21 +1,19 @@
-module state_machine1(clock, reset, cpu_action, i_state, writeback_block, f_state, bus);
-    input clock, reset;
+module state_machine1(clock, active_m1, cpu_action, i_state, processor, writeback_block, f_state, bus, processor_index);
+    input clock, active_m1;
     input [2:0] cpu_action;
-    input [1:0] i_state; 
+    input [1:0] i_state, processor; 
 
     output reg writeback_block;
-    output reg [1:0] f_state;
+    output reg [1:0] f_state, processor_index;
     output reg [2:0] bus;
 
     initial 
         writeback_block = 1'b0;
 
-    always @(posedge clock or posedge reset) begin
-        if (reset) begin
-            f_state = i_state;
-        end
-        else begin    
-            case (f_state)
+    always @(*) begin
+        if (active_m1) begin   
+            processor_index = processor;
+            case (i_state)
                 //invalid
                 2'b00: begin
                     case(cpu_action)
