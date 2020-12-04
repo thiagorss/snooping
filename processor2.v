@@ -11,7 +11,6 @@ module processor2(processor_index, clock, reset, start, listen, p2, op, block, t
     
     wire hit, wb_m1, wb_m2;
     wire [1:0] state_m1, state_m2, processor_m1, processor_m2;
-    wire [2:0] bus;
     wire [7:0] data_m2;
 
     reg w, wb, active_m1, active_m2, cache_hit;
@@ -41,6 +40,8 @@ module processor2(processor_index, clock, reset, start, listen, p2, op, block, t
     integer i;
     always @(posedge clock or posedge reset) begin
         if (reset) begin
+            w = 1'b0;
+            wb = 1'b0;
             step = 1'b0;
             cache_hit = 1'b0;
             active_m1 = 1'b0;
@@ -59,6 +60,7 @@ module processor2(processor_index, clock, reset, start, listen, p2, op, block, t
                                 //read hit
                                 if (tag_p2[block] == tag_in && state_p2[block] != 2'b00) begin
                                     cpu_action = 3'b001;
+                                    w = 1'b1;
                                 end
                                 //read miss
                                 else begin
@@ -89,7 +91,6 @@ module processor2(processor_index, clock, reset, start, listen, p2, op, block, t
                     end
                     step = 2'b01;
                 end
-
                 2'b01: begin
                     //mudança de estado do processador que gera a ação
                     if(processor_index == processor_m1) begin
@@ -117,5 +118,5 @@ module processor2(processor_index, clock, reset, start, listen, p2, op, block, t
         end
     end
     state_machine1 sm1(clock, active_m1, cpu_action, state_p2[block], p2, wb_m1, state_m1, bus_m1, processor_m1);
-    state_machine2 sm2(clock, active_m2, cache_hit, state_p2[block], p2, bus_m1_in, data_p2[block], wb_m2, abort_mem_accs, hit, state_m2, processor_m2, data_m2);
+    state_machine2 sm2(reset, active_m2, cache_hit, state_p2[block], p2, bus_m1_in, data_p2[block], wb_m2, abort_mem_accs, hit, state_m2, processor_m2, data_m2);
 endmodule
