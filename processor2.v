@@ -99,8 +99,9 @@ module processor2(processor_index, clock, reset, start, listen, p2, op, block, t
                         state_p2[block] = state_m1;
                         tag_p2[block] = (cpu_action == 3'b010 && bus_in[10] == 1'b1) ? tag_in : tag_p2[block];
                         data_p2[block] = (cpu_action == 3'b011 || cpu_action == 3'b100) ? wr_data : data_p2[block];
-                        data_p2[block] = (cpu_action == 3'b010 && bus_in[10] == 1'b1) ? data_m2 : data_p2[block];
+                        data_p2[block] = (cpu_action == 3'b010 && bus_in[10] == 1'b1) ? bus_in[7:0] : data_p2[block];
                         bus_out = {wb, w, state_p2[block], data_p2[block]};
+                        step = 2'b10;
                     end
                     //mudança de estado dos processadores que escutam o barramento
                     if (processor_index != processor_m2) begin
@@ -109,14 +110,15 @@ module processor2(processor_index, clock, reset, start, listen, p2, op, block, t
                         active_m2 = 1'b0;
                         state_p2[block] = state_m2;
                         bus_out = {wb, hit, state_p2[block], data_p2[block]};
+                        step = 2'b10;
                     end
                 end
                 2'b10: begin
-                    step = 2'b0;
+                    //nada
                 end
             endcase
         end
     end
-    state_machine1 sm1(clock, active_m1, cpu_action, state_p2[block], p2, wb_m1, state_m1, bus_m1, processor_m1);
+    state_machine1 sm1(reset, active_m1, cpu_action, state_p2[block], p2, wb_m1, state_m1, bus_m1, processor_m1);
     state_machine2 sm2(reset, active_m2, cache_hit, state_p2[block], p2, bus_m1_in, data_p2[block], wb_m2, abort_mem_accs, hit, state_m2, processor_m2, data_m2);
 endmodule
