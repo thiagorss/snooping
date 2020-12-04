@@ -1,5 +1,5 @@
-module state_machine1(clock, active_m1, cpu_action, i_state, processor, writeback_block, f_state, bus, processor_index);
-    input clock, active_m1;
+module state_machine1(reset, active_m1, cpu_action, i_state, processor, writeback_block, f_state, bus, processor_index);
+    input reset, active_m1;
     input [2:0] cpu_action;
     input [1:0] i_state, processor; 
 
@@ -11,6 +11,10 @@ module state_machine1(clock, active_m1, cpu_action, i_state, processor, writebac
         writeback_block = 1'b0;
 
     always @(*) begin
+        if (reset) begin
+            processor_index = 2'bxx;
+            writeback_block = 0;
+        end
         if (active_m1) begin   
             processor_index = processor;
             case (i_state)
