@@ -61,8 +61,8 @@ module snooping(clock, reset, instruction);
     end
     //module processor0(processor_index, clock, reset, start, listen, p0, op, block, tag_in, wr_data, bus_m1_in, bus_in, bus_out, bus_m1);
     processor0 p0(2'b00, clock, reset, cpu_action[0], cpu_listen[0], instruction[15:14], instruction[13], block, instruction[12:8], instruction[7:0], mbus[3], buswires, bus0, mbus[0]);
-    processor1 p1(2'b10, clock, reset, cpu_action[1], cpu_listen[1], instruction[15:14], instruction[13], block, instruction[12:8], instruction[7:0], mbus[3], buswires, bus1, mbus[1]);
-    processor2 p2(2'b11, clock, reset, cpu_action[2], cpu_listen[2], instruction[15:14], instruction[13], block, instruction[12:8], instruction[7:0], mbus[3], buswires, bus2, mbus[2]);
+    processor1 p1(2'b01, clock, reset, cpu_action[1], cpu_listen[1], instruction[15:14], instruction[13], block, instruction[12:8], instruction[7:0], mbus[3], buswires, bus1, mbus[1]);
+    processor2 p2(2'b10, clock, reset, cpu_action[2], cpu_listen[2], instruction[15:14], instruction[13], block, instruction[12:8], instruction[7:0], mbus[3], buswires, bus2, mbus[2]);
     machinebus mb(instruction[15:14], mbus[0], mbus[1], mbus[2], mbus[3]);
     databus dab(bus0, bus1, bus2, bus_mem, buswires);
     memory m1(clock, instruction[12:8], buswires, bus_mem);
