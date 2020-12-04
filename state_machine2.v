@@ -1,5 +1,5 @@
-module state_machine2(clock, active_m2, cache_hit, i_state, processor, bus, data_in, writeback_block, abort_mem_accs, hit, f_state, processor_index, data_out);
-    input clock, active_m2, cache_hit;
+module state_machine2(reset, active_m2, cache_hit, i_state, processor, bus, data_in, writeback_block, abort_mem_accs, hit, f_state, processor_index, data_out);
+    input reset, active_m2, cache_hit;
     input [1:0] i_state, processor;
     input [2:0] bus;
     input [7:0] data_in;
@@ -14,6 +14,14 @@ module state_machine2(clock, active_m2, cache_hit, i_state, processor, bus, data
     end
 
     always @(*) begin
+        if (reset) begin
+            writeback_block = 1'b0;
+            abort_mem_accs = 1'b0;
+            hit = 1'b0;
+            f_state = 2'bxx;
+            processor_index = 2'bxx;
+            data_out = 7'bx;
+        end
         if (active_m2) begin
             processor_index = processor;
             case (i_state)
