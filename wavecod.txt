@@ -1,0 +1,29 @@
+vsim +altera -do snooping_run_msim_rtl_verilog.do -l msim_transcript -gui work.snooping
+
+wave create -driver freeze -pattern clock -initialvalue 1 -period 50ps -dutycycle 50 -starttime 0ps -endtime 1000ps sim:/snooping/clock
+
+wave create -driver freeze -pattern constant -value 0 -starttime 0ps -endtime 1000ps sim:/snooping/reset
+wave modify -driver freeze -pattern constant -value 1 -starttime 0ps -endtime 5ps Edit:/snooping/reset
+wave modify -driver freeze -pattern constant -value St1 -starttime 152ps -endtime 155ps Edit:/snooping/reset
+wave modify -driver freeze -pattern constant -value 1 -starttime 302ps -endtime 305ps Edit:/snooping/reset
+wave modify -driver freeze -pattern constant -value 1 -starttime 502ps -endtime 505ps Edit:/snooping/reset
+wave modify -driver freeze -pattern constant -value St1 -starttime 652ps -endtime 655ps Edit:/snooping/reset
+
+wave create -driver freeze -pattern constant -value 0000100000000000 -range 15 0 -starttime 0ps -endtime 1000ps sim:/snooping/instruction
+wave modify -driver freeze -pattern constant -value 0010100000001111 -range 15 0 -starttime 150ps -endtime 1000ps Edit:/snooping/instruction
+wave modify -driver freeze -pattern constant -value 0001000000000000 -range 15 0 -starttime 302ps -endtime 1000ps Edit:/snooping/instruction
+wave modify -driver freeze -pattern constant -value 0110100001100011 -range 15 0 -starttime 502ps -endtime 1000ps Edit:/snooping/instruction
+wave modify -driver freeze -pattern constant -value 1000100000000000 -range 15 0 -starttime 652ps -endtime 1000ps Edit:/snooping/instruction
+
+
+add wave -position end  sim:/snooping/p0/state_p0
+add wave -position end  sim:/snooping/p0/tag_p0
+add wave -position end  sim:/snooping/p0/data_p0
+add wave -position end  sim:/snooping/p1/state_p1
+add wave -position end  sim:/snooping/p1/tag_p1
+add wave -position end  sim:/snooping/p1/data_p1
+add wave -position end  sim:/snooping/p2/state_p2
+add wave -position end  sim:/snooping/p2/tag_p2
+add wave -position end  sim:/snooping/p2/data_p2
+add wave -position end  sim:/snooping/m1/mem
+add wave -position end  sim:/snooping/m1/tag
