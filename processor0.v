@@ -119,5 +119,5 @@ module processor0(processor_index, clock, reset, start, listen, p0, op, block, t
     end
     //module state_machine1(clock, active_m1, cpu_action, i_state, processor, writeback_block, f_state, bus, processor_index);
     state_machine1 sm1(clock, active_m1, cpu_action, state_p0[block], p0, wb_m1, state_m1, bus_m1 , processor_m1);
-    state_machine2 sm2(clock, active_m2, cache_hit, state_p0[block], p0, bus_m1_in, data_p0[block], wb_m2, abort_mem_accs, hit, state_m2, processor_m2, data_m2);
+    state_machine2 sm2(reset, active_m2, cache_hit, state_p0[block], p0, bus_m1_in, data_p0[block], wb_m2, abort_mem_accs, hit, state_m2, processor_m2, data_m2);
 endmodule
